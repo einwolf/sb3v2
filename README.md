@@ -20,3 +20,4 @@ The make_atari_env() vectorized stacks 4 games in a 2x2 square and plays them
 all at once. The rgb_array is 2x2 screens then and the model only works on 2x2.
 
 Uses old gym 0.21 env.reset() and step() return values.
+Render doesn't seem to work (with vectorized).
