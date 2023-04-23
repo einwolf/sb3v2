@@ -10,12 +10,13 @@ from stable_baselines3.common.callbacks import (EvalCallback,
                                                 StopTrainingOnRewardThreshold)
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTransposeImage
+from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTransposeImage, VecVideoRecorder
 
 environment_name = "ALE/Breakout-v5"
 
 log_path = "tensorboard_logs"
 a2c_model_path = os.path.join("saved_models", "a2c_model_breakout")
+video_path = "video"
 
 
 def parse_cmd_line():
@@ -33,6 +34,7 @@ def parse_cmd_line():
 def make_output_dirs():
     os.makedirs(log_path, exist_ok=True)
     os.makedirs(a2c_model_path, exist_ok=True)
+    os.makedirs(video_path, exist_ok=True)
 
 
 def eval():
@@ -47,11 +49,20 @@ def eval():
     print(f"{log_path=}")
 
     # Initialize
-    # make_output_dirs()
+    make_output_dirs()
+    video_length = 100
 
     env = make_atari_env(environment_name, n_envs=4, seed=0)
+    # env = make_atari_env(environment_name, n_envs=4, seed=0, env_kwargs={"render_mode": "rgb_array"})
     env = VecFrameStack(env, n_stack=4)
     env = VecTransposeImage(env)
+
+    # Asserts render_mode must be rgb_array when it should be set to that by default
+    # env = VecVideoRecorder(env,
+    #                 video_path,
+    #                 record_video_trigger=lambda step: step == 0,
+    #                 video_length=video_length,
+    #                 name_prefix=f"random-agent-{environment_name}")
 
     print(f"Load model {args.load_model}")
     model = A2C.load(args.load_model, env=env)
@@ -68,7 +79,7 @@ def eval():
         obs, rewards, done, info = env.step(action)
         # obs, rewards, terminated, truncated, info = env.step(action)
 
-        # frame = env.render()
+        frame = env.render(mode="human")
 
         # done = terminated or truncated
         done = done.all()
