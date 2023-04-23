@@ -23,8 +23,8 @@ def parse_cmd_line():
 
     parser.add_argument("--n_eval_episodes", required=False, type=int, default=10,
                     help="Run evaluation for this many episodes")
-    parser.add_argument("--load_model", required=False, type=Path, default=False,
-                    help="Continue training from this model file")
+    parser.add_argument("--load_model", required=True, type=Path, default=False,
+                    help="Evaluate this model file")
 
     args = parser.parse_args()
     return args

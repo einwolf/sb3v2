@@ -21,3 +21,4 @@ all at once. The rgb_array is 2x2 screens then and the model only works on 2x2.
 
 Uses old gym 0.21 env.reset() and step() return values.
 Call render() inline also.
+DummyVecEnv uses old gym api also.
