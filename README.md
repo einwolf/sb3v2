@@ -22,3 +22,9 @@ all at once. The rgb_array is 2x2 screens then and the model only works on 2x2.
 Uses old gym 0.21 env.reset() and step() return values.
 Call render() inline also.
 DummyVecEnv uses old gym api also.
+
+## Lander
+
+Apparently stable_baselines3 always uses the vectorized api even for non-graphical
+(rgb_array) training environments. It forces a DummyVenEnv.
+This also means it uses the old gym 0.21 calling style.

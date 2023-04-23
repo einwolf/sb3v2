@@ -42,7 +42,7 @@ def make_output_dirs():
 
 def train():
     """
-    Train model using make_atari_env() and vectorized stacking
+    Train model using one DummyVecEnv
     """
     # Parse command line
     args = parse_cmd_line()

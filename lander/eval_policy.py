@@ -4,7 +4,7 @@ import gymnasium as gym
 from pathlib import Path
 import argparse
 
-from stable_baselines3 import A2C
+from stable_baselines3 import A2C, DQN
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import (EvalCallback,
                                                 StopTrainingOnRewardThreshold)
@@ -12,10 +12,10 @@ from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTransposeImage
 
-environment_name = "ALE/Breakout-v5"
+environment_name = "LunarLander-v2"
 
 log_path = "tensorboard_logs"
-a2c_model_path = os.path.join("saved_models", "a2c_model_breakout")
+dqn_model_path = os.path.join("saved_models", "dqn_model_lander")
 
 
 def parse_cmd_line():
@@ -23,7 +23,7 @@ def parse_cmd_line():
 
     parser.add_argument("--n_eval_episodes", required=False, type=int, default=10,
                     help="Run evaluation for this many episodes")
-    parser.add_argument("--load_model", required=False, type=Path, default=False,
+    parser.add_argument("--load_model", required=True, type=Path, default=False,
                     help="Evaluate this model file")
 
     args = parser.parse_args()
@@ -32,7 +32,7 @@ def parse_cmd_line():
 
 def make_output_dirs():
     os.makedirs(log_path, exist_ok=True)
-    os.makedirs(a2c_model_path, exist_ok=True)
+    os.makedirs(dqn_model_path, exist_ok=True)
 
 
 def eval():
@@ -49,12 +49,12 @@ def eval():
     # Initialize
     # make_output_dirs()
 
-    env = make_atari_env(environment_name, n_envs=4, seed=0)
-    env = VecFrameStack(env, n_stack=4)
-    env = VecTransposeImage(env)
+    env = gym.make(environment_name, render_mode="human")
+    env = Monitor(env)
+    env = DummyVecEnv([lambda: env])
 
     print(f"Load model {args.load_model}")
-    model = A2C.load(args.load_model, env=env)
+    model = DQN.load(args.load_model, env=env)
 
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=args.n_eval_episodes, render=True)
     print(f"mean_reward per episode = {mean_reward}")
