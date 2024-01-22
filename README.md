@@ -1,12 +1,126 @@
 # Notes
 
-## pytorch 2.0
+pip install works
+pdm has problem with box2d not properly using swig as build dependency
+poetry has trouble with pytorch in external download
+
+## pip
+
+```bash
+# use with venv
+pip install -U pip setuptools wheel
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install gymnasium[atari,accept-rom-license,box2d]==0.28.1
+pip install stable_baselines3
+pip install tensorboard
+```
+
+## pdm
+
+```bash
+# pdm 2.7.4
+pdm add https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl
+# Takes 3 min
+pdm add https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl
+pdm add https://download.pytorch.org/whl/cu118/torchaudio-2.0.2%2Bcu118-cp310-cp310-linux_x86_64.whl
+pdm add gymnasium[atari,accept-rom-license,box2d]==0.28.1
+# build error with swig
+pdm add stable_baselines3
+pdm add tensorboard
+```
+
+## poetry 1.1.4
+
+```bash
+# pytorch from pypi
+# gives wrong cuda 11.7 version error
+poetry add torch tensorboard
+poetry add gymnasium==^0.28.1 -E atari -E accept-rom-license -E box2d
+poetry add stable_baselines sb3-contrib
+poetry install
+```
+
+## pytorch 2.0 and poetry 1.5
+
+poetry add torch runs for 400+ seconds
 
 pip install torch
 installs a cuda 11.7 version.
 
 pip install torch==2.0.0+cu118 --index-url https://download.pytorch.org/whl/cu118
 is needed for cuda 11.8 version.
+
+```bash
+poetry source add --priority supplemental pytorch-cu118 https://download.pytorch.org/whl/cu118
+poetry add torch --source pytorch-cu118
+```
+
+## Adding pytorch on poetry 1.5
+
+Had to manually specify pytorch in toml. It seems to download way too many versions for dependency check.
+Doesn't finish install after 5 minutes.
+
+```toml
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "sb3v2"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+torch = {version = "2.0.1", source = "pytorch_cu118"}
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "pytorch_cu118"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "supplemental"
+```
+
+This one uses explicit urls. Need to match python version and os type.
+Dependency check still runs for a long time.
+
+```toml
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "sb3v2"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+torch = { url = "https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl" }
+torchaudio = { url = "https://download.pytorch.org/whl/cu118/torchaudio-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl" }
+torchvision = { url = "https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl" }
+```
+
+# poetry explicit url
+
+```bash
+# poetry 1.1.4
+poetry add https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl
+# fails to add
+```
+
+```bash
+# poetry 1.5.1
+poetry add https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl
+# doesn't resolve dependencies after 500s
+```
 
 ## gymnasium
 

@@ -1,27 +1,16 @@
-[tool.poetry]
-name = "sb3alpha"
-version = "0.1.0"
+
+[project]
+name = ""
+version = ""
 description = ""
-authors = ["Your Name <you@example.com>"]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-sb3-contrib = ">=2.0.0a1"
-stable-baselines3 = ">=2.0.0a1"
-gymnasium = {version = "^0.28.1", extras = ["atari", "accept-rom-license", "box2d"]}
-torch = {version = "^2.0.0+cu118", source = "pytorch-cu118"}
-opencv-python = "^4.7.0.72"
-tensorboard = "^2.12.2"
-
-[tool.poetry.dev-dependencies]
-pytest = "^6.2"
-
-[[tool.poetry.source]]
-name = "pytorch-cu118"
-url = "https://download.pytorch.org/whl/cu118"
-default = false
-secondary = true
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+authors = [
+    {name = "n", email = "n"},
+]
+dependencies = [
+    "torch @ https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl",
+    "torchvision @ https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl",
+    "gymnasium[accept-rom-license,atari,box2d]==0.28.1",
+    "swig>=4.1.1",
+]
+requires-python = ">=3.10"
+license = {text = "n"}
