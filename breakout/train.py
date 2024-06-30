@@ -16,7 +16,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTran
 environment_name = "ALE/Breakout-v5"
 
 log_path = "tensorboard_logs"
-a2c_model_path = os.path.join("saved_models", "a2c_model_breakout")
+a2c_model_path = os.path.join("saved_models", "breakout_a2c")
 
 
 def parse_cmd_line():
@@ -40,9 +40,9 @@ def make_output_dirs():
     os.makedirs(a2c_model_path, exist_ok=True)
 
 
-def train_multi():
+def train_single():
     """
-    Train model using make_atari_env() and vectorized stacking
+    Train model using gym.make() and dummy vectorized stacking
     """
     # Parse command line
     args = parse_cmd_line()
@@ -67,6 +67,7 @@ def train_multi():
     #     render_mode=None                  # None | human | rgb_array
     # )
 
+    # The Atari environments need a vectorized env even if it's DummyVecEnv
     env = gym.make(environment_name, render_mode="rgb_array")
     env = Monitor(env)
     env = DummyVecEnv([lambda: env])
@@ -82,9 +83,11 @@ def train_multi():
                                 verbose=1)
 
     # Train
-    if args.load_model:
+    if args.load_model and Path(args.load_model).exists():
         print(f"Load {args.load_model}")
         model.load(path=args.load_model, env=env)
+    else:
+        print(f"Wanted to load {args.load_model} but it doesn't exist.")
 
     # The training and eval env mismatch is normal
     model.learn(total_timesteps=args.total_timesteps, callback=eval_callback)
@@ -95,4 +98,4 @@ def train_multi():
 
 
 if __name__ == "__main__":
-    train_multi()
+    train_single()

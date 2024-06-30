@@ -16,7 +16,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTran
 environment_name = "ALE/Breakout-v5"
 
 log_path = "tensorboard_logs"
-a2c_model_path = os.path.join("saved_models", "a2c_model_breakout")
+a2c_model_path = os.path.join("saved_models", "breakout_multi_a2c")
 
 
 def parse_cmd_line():
@@ -53,6 +53,10 @@ def train_multi():
     print(f"{args.save_model=}")
     print(f"{log_path=}")
 
+
+    # Initialize
+    make_output_dirs()
+
     # env = gym.make('ALE/Breakout-v5',
     #     obs_type='rgb',                   # ram | rgb | grayscale
     #     frameskip=4,                      # frame skip
@@ -63,9 +67,8 @@ def train_multi():
     #     render_mode=None                  # None | human | rgb_array
     # )
 
-    # Initialize
-    make_output_dirs()
-
+    # Use make_atari_env() and VecFrameStack() for combining n frames.
+    # Training is vectorized specific. Can't take n frames and use on 1 frame.
     env = make_atari_env(environment_name, n_envs=4, seed=0)
     env = VecFrameStack(env, n_stack=4)
     env = VecTransposeImage(env)
@@ -80,9 +83,11 @@ def train_multi():
                                 verbose=1)
 
     # Train
-    if args.load_model:
+    if args.load_model and Path(args.load_model).exists():
         print(f"Load {args.load_model}")
         model.load(path=args.load_model, env=env)
+    else:
+        print(f"Wanted to load {args.load_model} but it doesn't exist.")
 
     # The training and eval env mismatch is normal
     model.learn(total_timesteps=args.total_timesteps, callback=eval_callback)

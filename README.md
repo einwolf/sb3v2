@@ -1,19 +1,51 @@
 # Notes
 
-pip install works
-pdm has problem with box2d not properly using swig as build dependency
-poetry has trouble with pytorch in external download
+## 202407 check versions
+
+```bash
+# pip new venv
+. ~/python-venv/sb3v2-venv/bin/activate
+
+# Fedora 39
+# Python 3.11
+# CUDA 12.5
+# poetry-1.5.1-2.fc39.noarch
+# torch-2.3.1+cu121 torchaudio-2.3.1+cu121 torchvision-0.18.1+cu121
+# gymnasium-0.29.1
+# stable_baselines3-2.3.2 sb3_contrib-2.3.0 rl_zoo3-2.3.0
+# tensorboard-2.17.0
+```
+
+Gymnasium install options at `https://github.com/Farama-Foundation/Gymnasium/blob/main/pyproject.toml`
 
 ## pip
 
 ```bash
+python3.11 -m venv sb3v2-venv
+. ~/python-venv/sb3v2-venv/bin/activate
+
 # use with venv
 pip install -U pip setuptools wheel
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-pip install gymnasium[atari,accept-rom-license,box2d]==0.28.1
-pip install stable_baselines3
-pip install tensorboard
+#pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install pandas
+# pip install gymnasium[all] - jax + accept-rom-license
+pip install gymnasium[atari,accept-rom-license,box2d,classic-control,mujoco-py,toy-text] opencv-python
+pip install stable_baselines3 sb3_contrib rl_zoo3
+# Atari vectorized needs opencv-python (even for train)
+# Video recording needs moviepy
+pip install tensorboard opencv-python moviepy
 ```
+
+## Not tested below here
+
+## Old problems with v2.0.0 and alternative installers
+
+pdm has problem with box2d not properly using swig as build dependency
+
+poetry has trouble with pytorch in external download
+`https://github.com/python-poetry/poetry/issues/6409`
+`https://github.com/python-poetry/poetry/issues/8521`
 
 ## pdm
 

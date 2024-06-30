@@ -1,22 +1,21 @@
 import argparse
 import os
-from pathlib import Path
 
 import gymnasium as gym
-from stable_baselines3 import A2C, DQN
+
+from pathlib import Path
+
+from stable_baselines3 import DQN
+from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import (
     CallbackList, CheckpointCallback, EvalCallback,
     StopTrainingOnNoModelImprovement, StopTrainingOnRewardThreshold)
-from stable_baselines3.common.env_util import make_atari_env
-from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.vec_env import (DummyVecEnv, VecFrameStack,
-                                              VecTransposeImage)
+from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTransposeImage
 
 environment_name = "LunarLander-v2"
 
 log_path = "tensorboard_logs"
-dqn_model_path = os.path.join("saved_models", "dqn_model_lander")
+dqn_model_path = os.path.join("saved_models", "lander_dqn")
 
 
 def parse_cmd_line():
@@ -96,7 +95,8 @@ def train():
     callback_list = CallbackList(callbacks)
 
     # Train
-    if args.load_model:
+    if args.load_model and Path(args.load_model).exists():
+        print(f"Load {args.load_model}")
         model.load(path=args.load_model, env=env)
 
     model.learn(total_timesteps=args.total_timesteps, callback=callback_list)

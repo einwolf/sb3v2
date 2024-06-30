@@ -12,7 +12,7 @@ def env_test():
     Test environment with random actions
     """
     env = gym.make(environment_name, render_mode="rgb_array")
-    # check_env(env, warn=True)
+    check_env(env, warn=True)
 
     action_test = env.action_space.sample()
     print(f"{action_test=}")

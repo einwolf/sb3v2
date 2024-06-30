@@ -1,5 +1,6 @@
 .vscode
+.pdm-python
 __pycache__
 saved_models
 tensorboard_logs
-.pdm-python
+video

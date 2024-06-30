@@ -15,7 +15,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTran
 environment_name = "ALE/Breakout-v5"
 
 log_path = "tensorboard_logs"
-a2c_model_path = os.path.join("saved_models", "a2c_model_breakout")
+a2c_model_path = os.path.join("saved_models", "breakout_multi_a2c")
 video_path = "video"
 
 
@@ -57,15 +57,18 @@ def eval():
     env = VecFrameStack(env, n_stack=4)
     env = VecTransposeImage(env)
 
-    # Asserts render_mode must be rgb_array when it should be set to that by default
+    # Asserts render_mode must be rgb_array when it should be set to that by default (sb3 2.0.0)
+    video_name_prefix = f"agent-{environment_name}"
+    os.makedirs(Path(video_path) / Path(video_name_prefix), exist_ok=True)
+
     # env = VecVideoRecorder(env,
     #                 video_path,
     #                 record_video_trigger=lambda step: step == 0,
     #                 video_length=video_length,
-    #                 name_prefix=f"random-agent-{environment_name}")
+    #                 name_prefix=video_name_prefix)
 
     print(f"Load model {args.load_model}")
-    model = A2C.load(args.load_model, env=env)
+    model = A2C.load(Path(args.load_model).with_suffix(""), env=env)
 
     # Play game
     step = 0
