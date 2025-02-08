@@ -1,19 +1,26 @@
 # Notes
 
-## 202407 check versions
+## 20250207 check versions
+
+```text
+Minimal versions for sb3 2.5
+Python 3.9
+pytorch 2.3
+gymnasium 0.29.1
+gymnasium 1.0.0 supported in sb3 2.4.0
+```
 
 ```bash
 # pip new venv
 . ~/python-venv/sb3v2-venv/bin/activate
 
-# Fedora 39
-# Python 3.11
-# CUDA 12.5
-# poetry-1.5.1-2.fc39.noarch
-# torch-2.3.1+cu121 torchaudio-2.3.1+cu121 torchvision-0.18.1+cu121
-# gymnasium-0.29.1
-# stable_baselines3-2.3.2 sb3_contrib-2.3.0 rl_zoo3-2.3.0
-# tensorboard-2.17.0
+Fedora 41
+CUDA 12.8
+Python 3.12 (supported by sb3 2.5)
+stable_baselines3-2.5.o sb3_contrib-2.3.0 rl_zoo3-2.3.0
+torch-2.6
+gymnasium-1.0.0
+stable-baselines3-2.5
 ```
 
 Gymnasium install options at `https://github.com/Farama-Foundation/Gymnasium/blob/main/pyproject.toml`
@@ -21,20 +28,18 @@ Gymnasium install options at `https://github.com/Farama-Foundation/Gymnasium/blo
 ## pip
 
 ```bash
-python3.11 -m venv sb3v2-venv
+python3.12 -m venv ~/python-venv/sb3v2-venv
 . ~/python-venv/sb3v2-venv/bin/activate
 
-# use with venv
+# THe fedora python3.12 is very minimal
 pip install -U pip setuptools wheel
-#pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-pip install pandas
-# pip install gymnasium[all] - jax + accept-rom-license
-pip install gymnasium[atari,accept-rom-license,box2d,classic-control,mujoco-py,toy-text] opencv-python
-pip install stable_baselines3 sb3_contrib rl_zoo3
+pip install torch~=2.6 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+pip install tensorboard pandas
+# gymnasium 1.0 doesn't need accept-rom-license
 # Atari vectorized needs opencv-python (even for train)
 # Video recording needs moviepy
-pip install tensorboard opencv-python moviepy
+pip install gymnasium[atari,box2d,classic-control,mujoco-py,toy-text]~=1.0 opencv-python moviepy
+pip install stable_baselines3~=2.5 sb3_contrib rl_zoo3
 ```
 
 ## Not tested below here

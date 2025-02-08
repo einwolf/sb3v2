@@ -12,7 +12,7 @@ from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTransposeImage
 
-environment_name = "LunarLander-v2"
+environment_name = "LunarLander-v3"
 
 log_path = "tensorboard_logs"
 dqn_model_path = os.path.join("saved_models", "dqn_model_lander")

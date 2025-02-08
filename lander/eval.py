@@ -2,6 +2,8 @@ import os
 import sys
 
 import gymnasium as gym
+import ale_py
+
 from pathlib import Path
 import argparse
 
@@ -9,7 +11,9 @@ from stable_baselines3 import DQN
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTransposeImage
 
-environment_name = "LunarLander-v2"
+gym.register_envs(ale_py)
+
+environment_name = "LunarLander-v3"
 
 log_path = "tensorboard_logs"
 dqn_model_path = os.path.join("saved_models", "lander_dqn")

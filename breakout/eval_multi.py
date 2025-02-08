@@ -1,6 +1,8 @@
 import os
 
 import gymnasium as gym
+import ale_py
+
 from pathlib import Path
 import argparse
 
@@ -11,6 +13,8 @@ from stable_baselines3.common.callbacks import (EvalCallback,
 from stable_baselines3.common.env_util import make_atari_env
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTransposeImage, VecVideoRecorder
+
+gym.register_envs(ale_py)
 
 environment_name = "ALE/Breakout-v5"
 

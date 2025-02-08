@@ -1,8 +1,10 @@
 # Commmand examples
 
 ```bash
+# clean
 rm -rfv tensorboard_logs/* saved_models/* video/*
 
+# Select CUDA card
 export CUDA_VISIBLE_DEVICES=0
 export CUDA_VISIBLE_DEVICES=1
 export CUDA_VISIBLE_DEVICES=2

@@ -1,11 +1,13 @@
 import os
 
 import gymnasium as gym
+import ale_py
 
 from stable_baselines3.common.env_checker import check_env
 
+gym.register_envs(ale_py)
 
-environment_name = "LunarLander-v2"
+environment_name = "LunarLander-v3"
 
 def env_test():
     """

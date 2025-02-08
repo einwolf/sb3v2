@@ -1,9 +1,11 @@
 import os
 
 import gymnasium as gym
+import ale_py
 
 from stable_baselines3.common.env_checker import check_env
 
+gym.register_envs(ale_py)
 
 environment_name = "ALE/Breakout-v5"
 
@@ -12,7 +14,7 @@ def env_test():
     Test environment with random actions
     """
     env = gym.make(environment_name, render_mode="rgb_array")
-    # check_env(env, warn=True)
+    check_env(env, warn=True)
 
     action_test = env.action_space.sample()
     print(f"{action_test=}")
